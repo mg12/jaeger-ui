@@ -25,6 +25,8 @@ import { Span } from '../../../types/trace';
 
 import './SpanBar.css';
 
+import colorGenerator from '../../../utils/color-generator';
+
 type TCommonProps = {
   color: string;
   hintSide: string;
@@ -93,7 +95,13 @@ function SpanBar(props: TInnerProps) {
         aria-label={label}
         className="SpanBar--bar"
         style={{
-          background: color,
+          background: `linear-gradient(
+            to bottom,
+            ${color},
+            ${color} 70%,
+            ${span.tags.find( x => x.key == 'instance') ? colorGenerator.getColorByKey((span.tags.find(x => x.key == 'instance')?.value)) : color} 70%,
+            ${span.tags.find( x => x.key == 'instance') ? colorGenerator.getColorByKey((span.tags.find(x => x.key == 'instance')?.value)) : color} 100%
+          )`,
           left: toPercent(viewStart),
           width: toPercent(viewEnd - viewStart),
         }}
